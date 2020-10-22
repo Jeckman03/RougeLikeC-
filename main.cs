@@ -15,12 +15,15 @@ namespace ConsoleUI
 
 		player = CreateCharacter();
 
+		// Main game loop
 		while (playGame == true)
 		{
+
 			GamePlay(player);
 
 			Console.ReadLine();
-		} ;
+
+		} 
 
 		Console.WriteLine("You don't want to play the game. :(");
 
@@ -96,6 +99,16 @@ namespace ConsoleUI
 		Console.ResetColor();
 	}
 
+	private static FloorModel NewFloor()
+	{
+		FloorModel floor = new FloorModel();
+		floor.Level = 1;
+		Console.WriteLine();
+		Console.WriteLine($"Floor Level: { floor.Level }");
+
+		return floor;		
+	}
+
 	private static void GamePlay(CharacterModel character) 
 	{
 		bool stillAlive = true;
@@ -108,6 +121,7 @@ namespace ConsoleUI
 			CharacterUI(character);
 
 			// show the floor current level
+			NewFloor();
 
 			// display the encounter dialog
 			EncounterDialog("You have encountered a goblin!");
@@ -116,8 +130,11 @@ namespace ConsoleUI
 			Console.WriteLine("What will you do?");
 
 			// play out the actions
+			PlayerAttack(character, /* enemy goes here */)
 
 			// see if the player is still alive or not
+
+			Console.ReadLine();
 
 		} while (stillAlive == true);
 
