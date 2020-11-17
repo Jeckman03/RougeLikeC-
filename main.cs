@@ -91,12 +91,22 @@ namespace ConsoleUI
 		Console.WriteLine("------------------------------------------------------");		
 	}
 
-	private static void EncounterDialog(string message)
+	private static EnemyModel EncounterDialog()
 	{
+		EnemyModel enemy = new EnemyModel();
+		enemy.Name = "Gbolin";
+		enemy.Level = 1;
+		enemy.Health = 5;
+		enemy.AttackDmg = 2;
+		enemy.Defense = 1;
 		Console.ForegroundColor = ConsoleColor.Cyan;
 		Console.WriteLine();
-		Console.WriteLine(message);
+		Console.WriteLine($"You have encountered a { enemy.Name }!");
 		Console.ResetColor();
+		Console.WriteLine();
+		Console.WriteLine("What will you do?");
+
+		return enemy;
 	}
 
 	private static FloorModel NewFloor()
@@ -107,6 +117,35 @@ namespace ConsoleUI
 		Console.WriteLine($"Floor Level: { floor.Level }");
 
 		return floor;		
+	}
+
+	// User actions/choices
+	private static int FightOptions()
+	{
+		int output = 1;
+
+		Console.WriteLine("1. Attack");
+		Console.WriteLine("2. Defend");
+		Console.WriteLine("3. Use Potion");
+		Console.WriteLine();
+		Console.Write("Choice: ");
+		string userChoice = Console.ReadLine();
+
+		if (userChoice.ToLower() == "1")
+		{
+			Console.WriteLine("You have decieded to attack the enemy");
+			return output;
+		}
+		else if (userChoice.ToLower() == "2")
+		{
+			Console.WriteLine("You have decided to Defend");
+			return output;
+		}
+		else 
+		{
+			Console.WriteLine("You have used a potion");
+			return output;
+		}
 	}
 
 	private static void GamePlay(CharacterModel character) 
@@ -124,13 +163,33 @@ namespace ConsoleUI
 			NewFloor();
 
 			// display the encounter dialog
-			EncounterDialog("You have encountered a goblin!");
+			EnemyModel enemy = EncounterDialog();
 
 			// give player options on what to do
-			Console.WriteLine("What will you do?");
+			int userSelection = FightOptions();
 
-			// play out the actions
-			PlayerAttack(character, /* enemy goes here */)
+			if (userSelection == 1) 
+			{
+				int enemyHealth = enemy.Health;
+				bool isDead = false;
+				// play out the actions
+				(isDead, enemyHealth) = GameLogic.PlayerAttack(character, enemy);
+
+				if (isDead == true)
+				{
+					Console.WriteLine($"Your have killed the { enemy.Name }!");
+				}
+				else
+				{
+					Console.WriteLine($"The goblin now has { enemyHealth } health left!");
+				}
+				
+			}
+			else
+			{
+				Console.WriteLine("You didn't attack the enemy");
+			}
+
 
 			// see if the player is still alive or not
 
